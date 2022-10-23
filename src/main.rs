@@ -8,12 +8,12 @@ async fn index() -> Option<rocket::fs::NamedFile> {
 
 #[get("/css/<file_name>")]
 async fn css(file_name: &str) -> Option<rocket::fs::NamedFile> {
-    rocket::fs::NamedFile::open(Path::new("css/").join(file_name)).await.ok()
+    rocket::fs::NamedFile::open(Path::new("public_html/css").join(file_name)).await.ok()
 }
 
 #[get("/js/<file_name>")]
 async fn js(file_name: &str) -> Option<rocket::fs::NamedFile> {
-    rocket::fs::NamedFile::open(Path::new("js/").join(file_name)).await.ok()
+    rocket::fs::NamedFile::open(Path::new("public_html/js").join(file_name)).await.ok()
 }
 
 #[launch]
