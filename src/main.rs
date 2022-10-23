@@ -11,8 +11,13 @@ async fn css(file_name: &str) -> Option<rocket::fs::NamedFile> {
     rocket::fs::NamedFile::open(Path::new("css/").join(file_name)).await.ok()
 }
 
+#[get("/js/<file_name>")]
+async fn js(file_name: &str) -> Option<rocket::fs::NamedFile> {
+    rocket::fs::NamedFile::open(Path::new("js/").join(file_name)).await.ok()
+}
+
 #[launch]
 async fn rocket() -> _ {
     rocket::build()
-        .mount("/", routes![index])
+        .mount("/", routes![index, js, css])
 }
