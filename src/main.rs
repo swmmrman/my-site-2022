@@ -1,4 +1,5 @@
 use std::path::Path;
+use rocket::fs::FileServer;
 #[macro_use] extern crate rocket;
 
 #[get("/")]
@@ -19,5 +20,7 @@ async fn js(file_name: &str) -> Option<rocket::fs::NamedFile> {
 #[launch]
 async fn rocket() -> _ {
     rocket::build()
-        .mount("/", routes![index, js, css])
+        .mount("/", routes![index, css])
+        .mount("/js/", FileServer::from("public_html/js/"))
+        
 }
