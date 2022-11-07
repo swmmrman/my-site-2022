@@ -1,0 +1,1 @@
+setInterval(()=> document.body.style.backgroundColor = `#${Math.floor(Math.random() * 0xFFFFFF).toString(16)}`, 250);
