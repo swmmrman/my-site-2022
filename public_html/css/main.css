@@ -7,3 +7,14 @@ body {
     height: 100vh;
     color: limegreen;
 }
+form input {
+    float: right;
+    color: limegreen;
+    margin-left: 2em;
+}
+form {
+    border: 1px solid green;
+    width: max-content;
+    height: max-content;
+    padding: 1em 1em 2.2em 1em;
+}
