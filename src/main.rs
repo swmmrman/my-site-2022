@@ -7,8 +7,14 @@ async fn index() -> Option<rocket::fs::NamedFile> {
     rocket::fs::NamedFile::open(Path::new("public_html/index.html")).await.ok()
 }
 #[post("/post.html", data = "<text_field>")]
-async fn post(text_field: &str) -> &str {
-    text_field.clone()
+async fn post(text_field: &str) -> String {
+    let text_fields: Vec<&str> = text_field.split("&").collect();
+    let field_0: &str = text_fields[0].split("=").collect::<Vec<&str>>()[1];
+    let field_1: &str = text_fields[1].split("=").collect::<Vec<&str>>()[0];
+    format!("{}\n{}",
+        field_0,
+        field_1
+    )
 }
 
 #[launch]
