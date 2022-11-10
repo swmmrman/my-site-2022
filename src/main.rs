@@ -6,8 +6,8 @@ use rocket::{fs::FileServer, response::content::RawHtml};
 #[derive(FromForm)]
 struct FormFeilds<'l> {
     text_field: &'l str,
-    other_text: &'l str,
-    #[field(default=0)]
+    #[field(default="Empty String")]
+    other_text: String,
     optional: i32,
 }
 
