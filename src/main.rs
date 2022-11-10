@@ -14,12 +14,9 @@ async fn index() -> Option<rocket::fs::NamedFile> {
     rocket::fs::NamedFile::open(Path::new("public_html/index.html")).await.ok()
 }
 
-#[post("/post.html", data = "<text_field>")]
-async fn post(text_field: &str) -> RawHtml<String> {
-    let text_fields: Vec<&str> = text_field.split("&").collect();
-    let field_0: &str = &text_fields[0].split("=").collect::<Vec<&str>>()[1].replace("+", " ");
-    let field_1: &str = &text_fields[1].split("=").collect::<Vec<&str>>()[1].replace("+", " ");
-    let text = format!(r#"<html>{}<br>{}</html>"#, field_0, field_1).to_owned();
+#[post("/post.html", data = "<fields>")]
+async fn post(fields: Form<FormFeilds<'_>>) -> RawHtml<String> {
+    let text = format!(r#"<html>{}<br>{}</html>"#, fields.text_field, fields.other_text).to_owned();
     RawHtml(
         text
     )
