@@ -1,11 +1,19 @@
 use std::path::Path;
+use rocket::form::Form;
 use rocket::{fs::FileServer, response::content::RawHtml};
 #[macro_use] extern crate rocket;
+
+#[derive(FromForm)]
+struct FormFeilds<'l> {
+    text_field: &'l str,
+    other_text: &'l str,
+}
 
 #[get("/")]
 async fn index() -> Option<rocket::fs::NamedFile> {
     rocket::fs::NamedFile::open(Path::new("public_html/index.html")).await.ok()
 }
+
 #[post("/post.html", data = "<text_field>")]
 async fn post(text_field: &str) -> RawHtml<String> {
     let text_fields: Vec<&str> = text_field.split("&").collect();
