@@ -7,6 +7,8 @@ use rocket::{fs::FileServer, response::content::RawHtml};
 struct FormFeilds<'l> {
     text_field: &'l str,
     other_text: &'l str,
+    #[field(default=0)]
+    optional: i32,
 }
 
 #[get("/")]
@@ -16,7 +18,11 @@ async fn index() -> Option<rocket::fs::NamedFile> {
 
 #[post("/post.html", data = "<fields>")]
 async fn post(fields: Form<FormFeilds<'_>>) -> RawHtml<String> {
-    let text = format!(r#"<html>{}<br>{}</html>"#, fields.text_field, fields.other_text).to_owned();
+    let text = format!(r#"<html>{}<br>{}<br>{}</html>"#, 
+                                fields.text_field,
+                                fields.other_text,
+                                fields.optional,
+    ).to_owned();
     RawHtml(
         text
     )
