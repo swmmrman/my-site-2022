@@ -38,6 +38,11 @@ async fn four_oh_three() -> rocket::fs::NamedFile {
     rocket::fs::NamedFile::open("errors/403.html").await.ok().unwrap()
 }
 
+#[catch(404)]
+async fn four_oh_four_admin() -> rocket::fs::NamedFile {
+    rocket::fs::NamedFile::open("errors/404a.html").await.ok().unwrap()
+}
+
 #[launch]
 async fn rocket() -> _ {
     rocket::build()
@@ -45,4 +50,5 @@ async fn rocket() -> _ {
         .mount("/js/", FileServer::from("public_html/js/"))
         .mount("/css/", FileServer::from("public_html/css/"))
         .register("/", catchers![four_oh_four, four_oh_three])
+        .register("/admin", catchers![four_oh_four_admin])
 }
