@@ -13,6 +13,8 @@ struct FormFeilds<'l> {
 
 #[get("/")]
 async fn index() -> Option<rocket::fs::NamedFile> {
+    let main_tmpl = std::fs::read_to_string(Path::new("tmpl/main.tmpl.html")).unwrap();
+
     rocket::fs::NamedFile::open(Path::new("public_html/index.html")).await.ok()
 }
 
