@@ -14,7 +14,8 @@ struct FormFeilds<'l> {
 #[get("/")]
 async fn index() -> Option<RawHtml<String>> {
     let main_tmpl = std::fs::read_to_string(Path::new("template/main.tmpl.html")).unwrap();
-    Some(RawHtml(main_tmpl))
+    let output = main_tmpl.replace("[content]", "Content Goes here");
+    Some(RawHtml(output))
 }
 
 #[post("/post.html", data = "<fields>")]
