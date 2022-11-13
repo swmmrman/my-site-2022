@@ -1,11 +1,14 @@
 html {
     background-color: black;
-    width: 100%;
     min-height: 100%;
 }
 body {
+    vertical-align: center;
+    background-color: rgb(36, 36, 36);
+    max-width: 120em;
     height: 100vh;
     color: limegreen;
+    margin: 0px auto;
 }
 form input {
     float: right;
@@ -17,4 +20,9 @@ form {
     width: max-content;
     height: max-content;
     padding: 1em 1em 2.2em 1em;
+}
+nav {
+    background-color: darkblue;
+    display: block;
+    width: 100%;
 }
