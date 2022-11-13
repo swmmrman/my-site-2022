@@ -14,7 +14,8 @@ struct FormFeilds<'l> {
 #[get("/")]
 async fn index() -> Option<RawHtml<String>> {
     let main_tmpl = std::fs::read_to_string(Path::new("template/main.tmpl.html")).unwrap();
-    let output = main_tmpl.replace("[content]", "Content Goes here");
+    let mut output = main_tmpl.replace("[content]", "Content Goes here");
+    output = output.replace("[title]", "Home Page");
     Some(RawHtml(output))
 }
 
