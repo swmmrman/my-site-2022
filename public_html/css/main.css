@@ -3,7 +3,6 @@ html {
     min-height: 100%;
 }
 body {
-    vertical-align: center;
     background-color: rgb(36, 36, 36);
     max-width: 120em;
     height: 100vh;
