@@ -21,10 +21,18 @@ async fn index() -> Option<RawHtml<String>> {
 }
 
 #[get("/<page>")]
-async fn get_page(page: &str) -> Option<RawHtml<String>> {
+async fn get_page(page: &str) -> Result<RawHtml<String>, rocket::http::Status> {
     let main_tmpl = std::fs::read_to_string(Path::new("template/main.tmpl.html")).unwrap();
-    let page_content = std::fs::read_to_string(Path::new("pages/").join(page)).ok()?;
-    let mut output = main_tmpl.replace("[content]", &page_content);
+    let page_results = std::fs::read_to_string(Path::new("pages/").join(page));
+    let mut page_content = String::new();
+    match page_results {
+        Ok(p) => page_content.push_str(&p),
+        Err(e) => return Err(parse_error(e)),
+    }
+    let output = main_tmpl.replace("[content]", &page_content);
+
+    Ok(RawHtml(output))
+}
 
 fn parse_error(e: Error) -> rocket::http::Status {
     match e.kind() {
