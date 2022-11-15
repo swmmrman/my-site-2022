@@ -26,7 +26,12 @@ async fn get_page(page: &str) -> Option<RawHtml<String>> {
     let page_content = std::fs::read_to_string(Path::new("pages/").join(page)).ok()?;
     let mut output = main_tmpl.replace("[content]", &page_content);
 
-    Some(RawHtml(output))
+fn parse_error(e: Error) -> rocket::http::Status {
+    match e.kind() {
+        ErrorKind::NotFound => rocket::http::Status::NotFound,
+        ErrorKind::PermissionDenied => rocket::http::Status::Forbidden,
+        _ => rocket::http::Status::ImATeapot,
+    }
 }
 
 #[post("/post.html", data = "<fields>")]
