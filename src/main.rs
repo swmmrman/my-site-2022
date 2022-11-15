@@ -20,6 +20,15 @@ async fn index() -> Option<RawHtml<String>> {
     Some(RawHtml(output))
 }
 
+#[get("/<page>")]
+async fn get_page(page: &str) -> Option<RawHtml<String>> {
+    let main_tmpl = std::fs::read_to_string(Path::new("template/main.tmpl.html")).unwrap();
+    let page_content = std::fs::read_to_string(Path::new("pages/").join(page)).ok()?;
+    let mut output = main_tmpl.replace("[content]", &page_content);
+
+    Some(RawHtml(output))
+}
+
 #[post("/post.html", data = "<fields>")]
 async fn post(fields: Form<FormFeilds<'_>>) -> RawHtml<String> {
     let text = format!(r#"<html>{}<br>{}<br>{}</html>"#, 
@@ -50,7 +59,7 @@ async fn four_oh_four_admin() -> rocket::fs::NamedFile {
 #[launch]
 async fn rocket() -> _ {
     rocket::build()
-        .mount("/", routes![index, post])
+        .mount("/", routes![index, post, get_page])
         .mount("/js/", FileServer::from("public_html/js/"))
         .mount("/css/", FileServer::from("public_html/css/"))
         .register("/", catchers![four_oh_four, four_oh_three])
