@@ -29,7 +29,10 @@ async fn index_redirect() -> rocket::response::Redirect {
 #[get("/admin")]
 async fn admin_index() -> Option<RawHtml<String>> {
     let admin_tmpl = std::fs::read_to_string(Path::new("template/admin/main.tmpl.html")).unwrap();
-    Some(RawHtml(admin_tmpl))
+    let index_content = std::fs::read_to_string(Path::new("pages/admin/index.html")).unwrap();
+    let mut output = admin_tmpl.replace("[content]", &index_content);
+    output = output.replace("[title]", "Admin Pages");
+    Some(RawHtml(output))
 }
 
 #[get("/<page>")]
