@@ -26,6 +26,12 @@ async fn index_redirect() -> rocket::response::Redirect {
     rocket::response::Redirect::to(rocket::uri!("/"))
 }
 
+#[get("/admin")]
+async fn admin_index() -> Option<RawHtml<String>> {
+    let admin_tmpl = std::fs::read_to_string(Path::new("template/admin/main.tmpl.html")).unwrap();
+    Some(RawHtml(admin_tmpl))
+}
+
 #[get("/<page>")]
 async fn get_page(page: &str) -> Result<RawHtml<String>, rocket::http::Status> {
     let main_tmpl = std::fs::read_to_string(Path::new("template/main.tmpl.html")).unwrap();
@@ -78,7 +84,7 @@ async fn four_oh_four_admin() -> rocket::fs::NamedFile {
 #[launch]
 async fn rocket() -> _ {
     rocket::build()
-        .mount("/", routes![index, post, get_page, index_redirect])
+        .mount("/", routes![index, post, get_page, index_redirect, admin_index])
         .mount("/js/", FileServer::from("public_html/js/"))
         .mount("/css/", FileServer::from("public_html/css/"))
         .register("/", catchers![four_oh_four, four_oh_three])
