@@ -1,3 +1,16 @@
 header {
     color: red;
 }
+
+body {
+    color: red;
+}
+
+nav a,
+a {
+    color: red;
+}
+a:visited,
+nav a:visited {
+    color: darkred;
+}
