@@ -35,6 +35,20 @@ async fn admin_index() -> Option<RawHtml<String>> {
     Some(RawHtml(output))
 }
 
+#[get("/admin/<page>")]
+async fn get_admin_page(page: &str) -> Result<RawHtml<String>, rocket::http::Status> {
+    let admin_tmpl = std::fs::read_to_string(Path::new("template/admin/main.tmpl.html")).unwrap();
+    let page_results = std::fs::read_to_string(Path::new("pages/admin/").join(page));
+    let mut page_content = String::new();
+    match page_results {
+        Ok(p) => page_content.push_str(&p),
+        Err(e) => return Err(parse_error(e)),
+    }
+    let output = admin_tmpl.replace("[content]", &page_content);
+
+    Ok(RawHtml(output))
+}
+
 #[get("/<page>")]
 async fn get_page(page: &str) -> Result<RawHtml<String>, rocket::http::Status> {
     let main_tmpl = std::fs::read_to_string(Path::new("template/main.tmpl.html")).unwrap();
@@ -87,7 +101,7 @@ async fn four_oh_four_admin() -> rocket::fs::NamedFile {
 #[launch]
 async fn rocket() -> _ {
     rocket::build()
-        .mount("/", routes![index, post, get_page, index_redirect, admin_index])
+        .mount("/", routes![index, post, get_page, index_redirect, admin_index, get_admin_page])
         .mount("/js/", FileServer::from("public_html/js/"))
         .mount("/css/", FileServer::from("public_html/css/"))
         .register("/", catchers![four_oh_four, four_oh_three])
