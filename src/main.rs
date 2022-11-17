@@ -15,9 +15,10 @@ struct FormFeilds<'l> {
 #[get("/")]
 async fn index() -> Option<RawHtml<String>> {
     let main_tmpl = std::fs::read_to_string(Path::new("template/main.tmpl.html")).unwrap();
-    let index_content = std::fs::read_to_string(Path::new("pages/index.html")).unwrap();
+    let mut title = std::fs::read_to_string(Path::new("pages/index.html")).unwrap();
+    let index_content = title.split_off(title.find("\n").unwrap());
     let mut output = main_tmpl.replace("[content]", &index_content);
-    output = output.replace("[title]", "Home Page");
+    output = output.replace("[title]", &title);
     Some(RawHtml(output))
 }
 
