@@ -45,8 +45,8 @@ async fn get_admin_page(page: &str) -> Result<RawHtml<String>, rocket::http::Sta
         Ok(p) => page_content.push_str(&p),
         Err(e) => return Err(parse_error(e)),
     }
-    let output = admin_tmpl.replace("[content]", &page_content);
-
+    let mut output = admin_tmpl.replace("[content]", &page_content);
+    output = output.replace("[title]", "Admin");
     Ok(RawHtml(output))
 }
 
