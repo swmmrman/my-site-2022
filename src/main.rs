@@ -12,7 +12,7 @@ struct FormFeilds<'l> {
 
 #[get("/")]
 async fn index() -> Result<RawHtml<String>, rocket::http::Status> {
-    my_site_2022::make_page("index.html", false)
+    my_site_2022::make_page(PathBuf::new().join("index.html"), false)
 }
 
 #[get("/index.html")]
@@ -22,7 +22,7 @@ async fn index_redirect() -> rocket::response::Redirect {
 
 #[get("/admin")]
 async fn admin_index() -> Result<RawHtml<String>, rocket::http::Status> {
-    my_site_2022::make_page("index.html", true)
+    my_site_2022::make_page(PathBuf::new().join("index.html"), true)
 }
 
 #[get("/admin/<page>")]
@@ -32,7 +32,7 @@ async fn get_admin_page(page: &str) -> Result<RawHtml<String>, rocket::http::Sta
 
 #[get("/<page>")]
 async fn get_page(page: &str) -> Result<RawHtml<String>, rocket::http::Status> {
-    my_site_2022::make_page(&page, false)
+    my_site_2022::make_page(page, false)
 }
 
 
