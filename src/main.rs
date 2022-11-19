@@ -37,16 +37,17 @@ async fn admin_index() -> Option<RawHtml<String>> {
 
 #[get("/admin/<page>")]
 async fn get_admin_page(page: &str) -> Result<RawHtml<String>, rocket::http::Status> {
-    let admin_tmpl = std::fs::read_to_string(Path::new("template/admin/main.tmpl.html")).unwrap();
-    let page_results = std::fs::read_to_string(Path::new("pages/admin/").join(page));
-    let mut page_content = String::new();
-    match page_results {
-        Ok(p) => page_content.push_str(&p),
-        Err(e) => return Err(my_site_2022::parse_error(e)),
-    }
-    let mut output = admin_tmpl.replace("[content]", &page_content);
-    output = output.replace("[title]", "Admin");
-    Ok(RawHtml(output))
+    // let admin_tmpl = std::fs::read_to_string(Path::new("template/admin/main.tmpl.html")).unwrap();
+    // let page_results = std::fs::read_to_string(Path::new("pages/admin/").join(page));
+    // let mut page_content = String::new();
+    // match page_results {
+    //     Ok(p) => page_content.push_str(&p),
+    //     Err(e) => return Err(my_site_2022::parse_error(e)),
+    // }
+    // let mut output = admin_tmpl.replace("[content]", &page_content);
+    // output = output.replace("[title]", "Admin");
+    // Ok(RawHtml(output))
+    my_site_2022::make_page(page, true)
 }
 
 #[get("/<page>")]
