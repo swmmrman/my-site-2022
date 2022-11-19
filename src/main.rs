@@ -1,3 +1,4 @@
+use std::path::PathBuf;
 use rocket::form::Form;
 use rocket::{fs::FileServer, response::content::RawHtml};
 #[macro_use] extern crate rocket;
@@ -26,12 +27,12 @@ async fn admin_index() -> Result<RawHtml<String>, rocket::http::Status> {
 }
 
 #[get("/admin/<page>")]
-async fn get_admin_page(page: &str) -> Result<RawHtml<String>, rocket::http::Status> {
+async fn get_admin_page(page: PathBuf) -> Result<RawHtml<String>, rocket::http::Status> {
     my_site_2022::make_page(page, true)
 }
 
-#[get("/<page>")]
-async fn get_page(page: &str) -> Result<RawHtml<String>, rocket::http::Status> {
+#[get("/<page..>")]
+async fn get_page(page: PathBuf) -> Result<RawHtml<String>, rocket::http::Status> {
     my_site_2022::make_page(page, false)
 }
 
