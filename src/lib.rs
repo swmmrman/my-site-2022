@@ -1,4 +1,4 @@
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::io::{Error, ErrorKind};
 use rocket::response::content::RawHtml;
 
@@ -19,12 +19,12 @@ pub fn sing_99_bottles() -> String {
     out
 }
 
-pub fn make_page(page: &str, admin: bool) -> Result<RawHtml<String>, rocket::http::Status> {
+pub fn make_page(page: PathBuf, admin: bool) -> Result<RawHtml<String>, rocket::http::Status> {
     let tmpl = match admin {
         true => std::fs::read_to_string(Path::new("template/admin/main.tmpl.html")).unwrap(),
         false => std::fs::read_to_string(Path::new("template/main.tmpl.html")).unwrap(),
     };
-    if page == "99-bottles.html" {
+    if page.as_os_str() == "99-bottles.html" {
         let mut out = tmpl.replace("[title]", "Best Traveling Song");
         out = out.replace("[content]", &sing_99_bottles());
         return Ok(RawHtml(out));
