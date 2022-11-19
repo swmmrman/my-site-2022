@@ -26,13 +26,15 @@ nav {
     display: block;
     width: calc(100% - 1em);
 }
-nav a {
-    color: limegreen;
-    text-decoration: none;
+a {
     padding: .2em;
+    color: limegreen;
 }
 a:visited {
     color: darkgreen;
+}
+nav a {
+    text-decoration: none;
 }
 header {
     text-align: center;
