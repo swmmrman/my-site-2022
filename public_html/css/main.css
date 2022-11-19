@@ -44,4 +44,11 @@ header {
 }
 #content-container {
     padding: 1rem;
+    min-height: calc(100% - 15em)
+}
+footer {
+    padding-top: 1em;
+    border-top: 1px solid lime;
+    min-width: calc(100% - 1em);
+    text-align: center;
 }
