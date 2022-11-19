@@ -1,4 +1,3 @@
-use std::io::{Error, ErrorKind};
 use std::path::Path;
 use rocket::form::Form;
 use rocket::{fs::FileServer, response::content::RawHtml};
@@ -43,7 +42,7 @@ async fn get_admin_page(page: &str) -> Result<RawHtml<String>, rocket::http::Sta
     let mut page_content = String::new();
     match page_results {
         Ok(p) => page_content.push_str(&p),
-        Err(e) => return Err(parse_error(e)),
+        Err(e) => return Err(my_site_2022::parse_error(e)),
     }
     let mut output = admin_tmpl.replace("[content]", &page_content);
     output = output.replace("[title]", "Admin");
@@ -52,29 +51,9 @@ async fn get_admin_page(page: &str) -> Result<RawHtml<String>, rocket::http::Sta
 
 #[get("/<page>")]
 async fn get_page(page: &str) -> Result<RawHtml<String>, rocket::http::Status> {
-    let main_tmpl = std::fs::read_to_string(Path::new("template/main.tmpl.html")).unwrap();
-    if page == "99-bottles.html" {
-        return Ok(RawHtml(main_tmpl.replace("[content]", &my_site_2022::sing_99_bottles())));
-    }
-    let page_results = std::fs::read_to_string(Path::new("pages/").join(page));
-    let mut title = String::new();
-    match page_results {
-        Ok(p) => title.push_str(&p),
-        Err(e) => return Err(parse_error(e)),
-    }
-    let page_content = title.split_off(title.find("\n").unwrap());
-    let mut output = main_tmpl.replace("[content]", &page_content);
-    output = output.replace("[title]", &title);
-    Ok(RawHtml(output))
+    my_site_2022::make_page(&page)
 }
 
-fn parse_error(e: Error) -> rocket::http::Status {
-    match e.kind() {
-        ErrorKind::NotFound => rocket::http::Status::NotFound,
-        ErrorKind::PermissionDenied => rocket::http::Status::Forbidden,
-        _ => rocket::http::Status::ImATeapot,
-    }
-}
 
 #[post("/post.html", data = "<fields>")]
 async fn post(fields: Form<FormFeilds<'_>>) -> RawHtml<String> {
