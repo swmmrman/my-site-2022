@@ -19,10 +19,13 @@ pub fn sing_99_bottles() -> String {
     out
 }
 
-pub fn make_page(page: &str) -> Result<RawHtml<String>, rocket::http::Status> {
-    let main_tmpl = std::fs::read_to_string(Path::new("template/main.tmpl.html")).unwrap();
+pub fn make_page(page: &str, admin: bool) -> Result<RawHtml<String>, rocket::http::Status> {
+    let tmpl = match admin {
+        true => std::fs::read_to_string(Path::new("template/admin/main.tmpl.html")).unwrap(),
+        false => std::fs::read_to_string(Path::new("template/main.tmpl.html")).unwrap(),
+    };
     if page == "99-bottles.html" {
-        return Ok(RawHtml(main_tmpl.replace("[content]", &sing_99_bottles())));
+        return Ok(RawHtml(tmpl.replace("[content]", &sing_99_bottles())));
     }
     let page_results = std::fs::read_to_string(Path::new("pages/").join(page));
     let mut title = String::new();
@@ -31,7 +34,7 @@ pub fn make_page(page: &str) -> Result<RawHtml<String>, rocket::http::Status> {
         Err(e) => return Err(crate::parse_error(e)),
     }
     let page_content = title.split_off(title.find("\n").unwrap());
-    let mut output = main_tmpl.replace("[content]", &page_content);
+    let mut output = tmpl.replace("[content]", &page_content);
     output = output.replace("[title]", &title);
     Ok(RawHtml(output))
 }
