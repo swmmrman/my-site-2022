@@ -53,6 +53,9 @@ async fn get_admin_page(page: &str) -> Result<RawHtml<String>, rocket::http::Sta
 #[get("/<page>")]
 async fn get_page(page: &str) -> Result<RawHtml<String>, rocket::http::Status> {
     let main_tmpl = std::fs::read_to_string(Path::new("template/main.tmpl.html")).unwrap();
+    if page == "99-bottles.html" {
+        return Ok(RawHtml(main_tmpl.replace("[content]", &my_site_2022::sing_99_bottles())));
+    }
     let page_results = std::fs::read_to_string(Path::new("pages/").join(page));
     let mut title = String::new();
     match page_results {
