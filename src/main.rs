@@ -1,4 +1,3 @@
-use std::path::Path;
 use rocket::form::Form;
 use rocket::{fs::FileServer, response::content::RawHtml};
 #[macro_use] extern crate rocket;
