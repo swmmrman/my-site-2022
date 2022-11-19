@@ -1,16 +1,22 @@
 header {
     color: red;
 }
-
 body {
     color: red;
 }
-
-nav a,
+nav a {
+    text-decoration: none;
+}
 a {
     color: red;
 }
-a:visited,
-nav a:visited {
+a:visited {
     color: darkred;
+}
+h1 {
+    margin-top: 0;
+    text-align: center;
+}
+footer {
+    border-top: 1px solid red;
 }
