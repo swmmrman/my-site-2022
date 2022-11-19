@@ -51,7 +51,7 @@ async fn get_admin_page(page: &str) -> Result<RawHtml<String>, rocket::http::Sta
 
 #[get("/<page>")]
 async fn get_page(page: &str) -> Result<RawHtml<String>, rocket::http::Status> {
-    my_site_2022::make_page(&page)
+    my_site_2022::make_page(&page, false)
 }
 
 
