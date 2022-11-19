@@ -25,7 +25,9 @@ pub fn make_page(page: &str, admin: bool) -> Result<RawHtml<String>, rocket::htt
         false => std::fs::read_to_string(Path::new("template/main.tmpl.html")).unwrap(),
     };
     if page == "99-bottles.html" {
-        return Ok(RawHtml(tmpl.replace("[content]", &sing_99_bottles())));
+        let mut out = tmpl.replace("[title]", "Best Traveling Song");
+        out = out.replace("[content]", &sing_99_bottles());
+        return Ok(RawHtml(out));
     }
 
     let page_results = match admin {
