@@ -54,7 +54,7 @@ async fn four_oh_four() -> Result<RawHtml<String>, rocket::http::Status> {
     let (page, title) = my_site_2022::get_page_title("errors/404.html");
     let tmpl = std::fs::read_to_string("template/main.tmpl.html").unwrap();
     let output = tmpl.replace("[content]", &page);
-    Ok(RawHtml(tmpl.replace("[title]", &title)))
+    Ok(RawHtml(output.replace("[title]", &title)))
 }
 
 #[catch(403)]
