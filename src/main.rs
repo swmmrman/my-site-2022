@@ -51,10 +51,10 @@ async fn post(fields: Form<FormFeilds<'_>>) -> RawHtml<String> {
 
 #[catch(404)]
 async fn four_oh_four() -> Result<RawHtml<String>, rocket::http::Status> {
-    let page = std::fs::read_to_string("errors/404.html").unwrap();
+    let (page, title) = my_site_2022::get_page_title("errors/404.html");
     let tmpl = std::fs::read_to_string("template/main.tmpl.html").unwrap();
-    Ok(RawHtml(tmpl.replace("[content]", &page)))
-    // rocket::fs::NamedFile::open("errors/404.html").await.ok().unwrap()
+    let output = tmpl.replace("[content]", &page);
+    Ok(RawHtml(tmpl.replace("[title]", &title)))
 }
 
 #[catch(403)]
