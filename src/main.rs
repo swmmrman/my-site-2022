@@ -50,6 +50,14 @@ async fn post(fields: Form<FormFeilds<'_>>) -> RawHtml<String> {
     )
 }
 
+#[catch(400)]
+async fn bad_request() -> Result<RawHtml<String>, rocket::http::Status> {
+    let (page, title) = my_site_2022::get_page_title("errors/400.html");
+    let tmpl = get_template("main");
+    let output = tmpl.replace("[content]", &page);
+    Ok(RawHtml(output.replace("[title]", &title)))
+}
+
 #[catch(404)]
 async fn four_oh_four() -> Result<RawHtml<String>, rocket::http::Status> {
     let (page, title) = my_site_2022::get_page_title("errors/404.html");
@@ -94,6 +102,6 @@ async fn rocket() -> _ {
         .mount("/js/", FileServer::from("public_html/js/").rank(-2))
         .mount("/css/", FileServer::from("public_html/css/").rank(-2))
         .mount("/images/", FileServer::from("public_html/images/").rank(-2))
-        .register("/", catchers![four_oh_four, four_oh_three, teapot, server_error])
+        .register("/", catchers![four_oh_four, four_oh_three, teapot, server_error, bad_request])
         .register("/admin", catchers![four_oh_four_admin])
 }

@@ -65,7 +65,7 @@ pub fn parse_error(e: Error) -> rocket::http::Status {
         //ErrorKind::IsADirectory => rocket::http::Status::NotFound,
         _ => {
             eprintln!("{}", e);
-            rocket::http::Status::InternalServerError
+            rocket::http::Status::BadRequest
         },
     }
 }
