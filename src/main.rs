@@ -1,5 +1,4 @@
 use std::path::PathBuf;
-use my_site_2022::get_template;
 use rocket::form::Form;
 use rocket::{fs::FileServer, response::content::RawHtml};
 #[macro_use] extern crate rocket;
@@ -53,7 +52,7 @@ async fn post(fields: Form<FormFeilds<'_>>) -> RawHtml<String> {
 #[catch(400)]
 async fn bad_request() -> Result<RawHtml<String>, rocket::http::Status> {
     let (page, title) = my_site_2022::get_page_title("errors/400.html");
-    let tmpl = get_template("main");
+    let tmpl = my_site_2022::get_template("main");
     let output = tmpl.replace("[content]", &page);
     Ok(RawHtml(output.replace("[title]", &title)))
 }
@@ -61,7 +60,7 @@ async fn bad_request() -> Result<RawHtml<String>, rocket::http::Status> {
 #[catch(404)]
 async fn four_oh_four() -> Result<RawHtml<String>, rocket::http::Status> {
     let (page, title) = my_site_2022::get_page_title("errors/404.html");
-    let tmpl = get_template("main");
+    let tmpl = my_site_2022::get_template("main");
     let output = tmpl.replace("[content]", &page);
     Ok(RawHtml(output.replace("[title]", &title)))
 }
@@ -69,7 +68,7 @@ async fn four_oh_four() -> Result<RawHtml<String>, rocket::http::Status> {
 #[catch(403)]
 async fn four_oh_three() -> Result<RawHtml<String>, rocket::http::Status> {
     let (page, title) = my_site_2022::get_page_title("errors/403.html");
-    let tmpl = get_template("/admin/main");
+    let tmpl = my_site_2022::get_template("/admin/main");
     let output = tmpl.replace("[content]", &page);
     Ok(RawHtml(output.replace("[title]", &title)))
 }
@@ -77,21 +76,21 @@ async fn four_oh_three() -> Result<RawHtml<String>, rocket::http::Status> {
 #[catch(404)]
 async fn four_oh_four_admin() -> Result<RawHtml<String>, rocket::http::Status> {
     let (page, title) = my_site_2022::get_page_title("errors/404a.html");
-    let tmpl = get_template("/admin/main");
+    let tmpl = my_site_2022::get_template("/admin/main");
     let output = tmpl.replace("[content]", &page);
     Ok(RawHtml(output.replace("[title]", &title)))
 }
 #[catch(418)]
 async fn teapot() -> Result<RawHtml<String>, rocket::http::Status> {
     let (page, title) = my_site_2022::get_page_title("errors/418.html");
-    let mut tmpl = get_template("main");
+    let mut tmpl = my_site_2022::get_template("main");
     tmpl = tmpl.replace("[content]", &page);
     Ok(RawHtml(tmpl.replace("[title]", &title)))
 }
 #[catch(500)]
 async fn server_error() -> Result<RawHtml<String>, rocket::http::Status> {
     let (page, title) = my_site_2022::get_page_title("errors/500.html");
-    let mut tmpl = get_template("main");
+    let mut tmpl = my_site_2022::get_template("main");
     tmpl = tmpl.replace("[content]", &page);
     Ok(RawHtml(tmpl.replace("[title]", &title)))
 }
