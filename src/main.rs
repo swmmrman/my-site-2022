@@ -59,7 +59,10 @@ async fn four_oh_four() -> Result<RawHtml<String>, rocket::http::Status> {
 
 #[catch(403)]
 async fn four_oh_three() -> rocket::fs::NamedFile {
-    rocket::fs::NamedFile::open("errors/403.html").await.ok().unwrap()
+    let (page, title) = my_site_2022::get_page_title("errors/403.html");
+    let tmpl = std::fs::read_to_string(Path::new("template/admin/main.tmpl.html")).unwrap();
+    let output = tmpl.replace("[content]", &page);
+    Ok(RawHtml(output.replace("[title]", &title)))
 }
 
 #[catch(404)]
