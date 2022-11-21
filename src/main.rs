@@ -68,7 +68,6 @@ async fn four_oh_four_admin() -> Result<RawHtml<String>, rocket::http::Status> {
     let tmpl = std::fs::read_to_string(Path::new("template/admin/main.tmpl.html")).unwrap();
     let output = tmpl.replace("[content]", &page);
     Ok(RawHtml(output))
-    //rocket::fs::NamedFile::open("errors/404a.html").await.ok().unwrap()
 }
 #[catch(418)]
 async fn teapot() -> Result<RawHtml<String>, rocket::http::Status> {
