@@ -1,4 +1,4 @@
-use std::path::{PathBuf, Path};
+use std::path::PathBuf;
 use my_site_2022::get_template;
 use rocket::form::Form;
 use rocket::{fs::FileServer, response::content::RawHtml};
