@@ -53,7 +53,7 @@ async fn post(fields: Form<FormFeilds<'_>>) -> RawHtml<String> {
 #[catch(404)]
 async fn four_oh_four() -> Result<RawHtml<String>, rocket::http::Status> {
     let (page, title) = my_site_2022::get_page_title("errors/404.html");
-    let tmpl = std::fs::read_to_string("template/main.tmpl.html").unwrap();
+    let tmpl = get_template("main");
     let output = tmpl.replace("[content]", &page);
     Ok(RawHtml(output.replace("[title]", &title)))
 }
@@ -61,7 +61,7 @@ async fn four_oh_four() -> Result<RawHtml<String>, rocket::http::Status> {
 #[catch(403)]
 async fn four_oh_three() -> Result<RawHtml<String>, rocket::http::Status> {
     let (page, title) = my_site_2022::get_page_title("errors/403.html");
-    let tmpl = std::fs::read_to_string(Path::new("template/admin/main.tmpl.html")).unwrap();
+    let tmpl = get_template("/admin/main");
     let output = tmpl.replace("[content]", &page);
     Ok(RawHtml(output.replace("[title]", &title)))
 }
@@ -69,14 +69,14 @@ async fn four_oh_three() -> Result<RawHtml<String>, rocket::http::Status> {
 #[catch(404)]
 async fn four_oh_four_admin() -> Result<RawHtml<String>, rocket::http::Status> {
     let (page, title) = my_site_2022::get_page_title("errors/404a.html");
-    let tmpl = std::fs::read_to_string(Path::new("template/admin/main.tmpl.html")).unwrap();
+    let tmpl = get_template("/admin/main");
     let output = tmpl.replace("[content]", &page);
     Ok(RawHtml(output.replace("[title]", &title)))
 }
 #[catch(418)]
 async fn teapot() -> Result<RawHtml<String>, rocket::http::Status> {
     let (page, title) = my_site_2022::get_page_title("errors/418.html");
-    let mut tmpl = std::fs::read_to_string(Path::new("template/main.tmpl.html")).unwrap();
+    let mut tmpl = get_template("main");
     tmpl = tmpl.replace("[content]", &page);
     Ok(RawHtml(tmpl.replace("[title]", &title)))
 }
