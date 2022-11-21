@@ -60,8 +60,14 @@ async fn four_oh_three() -> rocket::fs::NamedFile {
 }
 
 #[catch(404)]
-async fn four_oh_four_admin() -> rocket::fs::NamedFile {
-    rocket::fs::NamedFile::open("errors/404a.html").await.ok().unwrap()
+}
+#[catch(418)]
+async fn teapot() -> Result<RawHtml<String>, rocket::http::Status> {
+    let mut title = std::fs::read_to_string(Path::new("errors/418.html")).unwrap();
+    let mut tmpl = std::fs::read_to_string(Path::new("template/main.tmpl.html")).unwrap();
+    let page = title.split_off(title.find("\n").unwrap());
+    tmpl = tmpl.replace("[content]", &page);
+    Ok(RawHtml(tmpl.replace("[title]", &title)))
 }
 
 #[launch]
@@ -70,6 +76,6 @@ async fn rocket() -> _ {
         .mount("/", routes![index, post, get_page, index_redirect, admin_index, get_admin_page])
         .mount("/js/", FileServer::from("public_html/js/").rank(-2))
         .mount("/css/", FileServer::from("public_html/css/").rank(-2))
-        .register("/", catchers![four_oh_four, four_oh_three])
+        .register("/", catchers![four_oh_four, four_oh_three, teapot])
         .register("/admin", catchers![four_oh_four_admin])
 }
