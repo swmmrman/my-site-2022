@@ -53,6 +53,11 @@ pub fn get_page_title(file: &str) -> (String, String) {
     (page, title)
 }
 
+pub fn get_template(name: &str) -> String {
+    let target = format!("template/{}.tmpl.html", name);
+    std::fs::read_to_string(Path::new(&target)).unwrap()
+}
+
 pub fn parse_error(e: Error) -> rocket::http::Status {
     match e.kind() {
         ErrorKind::NotFound => rocket::http::Status::NotFound,

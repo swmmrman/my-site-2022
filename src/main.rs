@@ -1,4 +1,5 @@
 use std::path::{PathBuf, Path};
+use my_site_2022::get_template;
 use rocket::form::Form;
 use rocket::{fs::FileServer, response::content::RawHtml};
 #[macro_use] extern crate rocket;
@@ -82,7 +83,7 @@ async fn teapot() -> Result<RawHtml<String>, rocket::http::Status> {
 #[catch(500)]
 async fn server_error() -> Result<RawHtml<String>, rocket::http::Status> {
     let (page, title) = my_site_2022::get_page_title("errors/500.html");
-    let mut tmpl = std::fs::read_to_string(Path::new("template/main.tmpl.html")).unwrap();
+    let mut tmpl = get_template("main");
     tmpl = tmpl.replace("[content]", &page);
     Ok(RawHtml(tmpl.replace("[title]", &title)))
 }
