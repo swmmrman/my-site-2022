@@ -79,7 +79,13 @@ async fn teapot() -> Result<RawHtml<String>, rocket::http::Status> {
     tmpl = tmpl.replace("[content]", &page);
     Ok(RawHtml(tmpl.replace("[title]", &title)))
 }
-
+#[catch(500)]
+async fn server_error() -> Result<RawHtml<String>, rocket::http::Status> {
+    let (page, title) = my_site_2022::get_page_title("errors/500.html");
+    let mut tmpl = std::fs::read_to_string(Path::new("template/main.tmpl.html")).unwrap();
+    tmpl = tmpl.replace("[content]", &page);
+    Ok(RawHtml(tmpl.replace("[title]", &title)))
+}
 #[launch]
 async fn rocket() -> _ {
     rocket::build()
@@ -87,6 +93,6 @@ async fn rocket() -> _ {
         .mount("/js/", FileServer::from("public_html/js/").rank(-2))
         .mount("/css/", FileServer::from("public_html/css/").rank(-2))
         .mount("/images/", FileServer::from("public_html/images/").rank(-2))
-        .register("/", catchers![four_oh_four, four_oh_three, teapot])
+        .register("/", catchers![four_oh_four, four_oh_three, teapot, server_error])
         .register("/admin", catchers![four_oh_four_admin])
 }
