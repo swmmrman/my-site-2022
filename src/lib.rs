@@ -59,7 +59,7 @@ pub fn parse_error(e: Error) -> rocket::http::Status {
         ErrorKind::PermissionDenied => rocket::http::Status::Forbidden,
         //ErrorKind::IsADirectory => rocket::http::Status::NotFound,
         _ => {
-            println!("{}", e);
+            eprintln!("{}", e);
             rocket::http::Status::ImATeapot
         },
     }
