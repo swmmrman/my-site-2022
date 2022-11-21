@@ -1,4 +1,4 @@
-use std::path::PathBuf;
+use std::path::{PathBuf, Path};
 use rocket::form::Form;
 use rocket::{fs::FileServer, response::content::RawHtml};
 #[macro_use] extern crate rocket;
@@ -50,8 +50,11 @@ async fn post(fields: Form<FormFeilds<'_>>) -> RawHtml<String> {
 }
 
 #[catch(404)]
-async fn four_oh_four() -> rocket::fs::NamedFile {
-    rocket::fs::NamedFile::open("errors/404.html").await.ok().unwrap()
+async fn four_oh_four() -> Result<RawHtml<String>, rocket::http::Status> {
+    let page = std::fs::read_to_string("errors/404.html").unwrap();
+    let tmpl = std::fs::read_to_string("template/main.tmpl.html").unwrap();
+    Ok(RawHtml(tmpl.replace("[content]", &page)))
+    // rocket::fs::NamedFile::open("errors/404.html").await.ok().unwrap()
 }
 
 #[catch(403)]
@@ -60,6 +63,12 @@ async fn four_oh_three() -> rocket::fs::NamedFile {
 }
 
 #[catch(404)]
+async fn four_oh_four_admin() -> Result<RawHtml<String>, rocket::http::Status> {
+    let page = std::fs::read_to_string(Path::new("errors/404a.html")).unwrap();
+    let tmpl = std::fs::read_to_string(Path::new("template/admin/main.tmpl.html")).unwrap();
+    let output = tmpl.replace("[content]", &page);
+    Ok(RawHtml(output))
+    //rocket::fs::NamedFile::open("errors/404a.html").await.ok().unwrap()
 }
 #[catch(418)]
 async fn teapot() -> Result<RawHtml<String>, rocket::http::Status> {
