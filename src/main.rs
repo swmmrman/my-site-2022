@@ -64,10 +64,10 @@ async fn four_oh_three() -> rocket::fs::NamedFile {
 
 #[catch(404)]
 async fn four_oh_four_admin() -> Result<RawHtml<String>, rocket::http::Status> {
-    let page = std::fs::read_to_string(Path::new("errors/404a.html")).unwrap();
+    let (page, title) = my_site_2022::get_page_title("errors/404a.html");
     let tmpl = std::fs::read_to_string(Path::new("template/admin/main.tmpl.html")).unwrap();
     let output = tmpl.replace("[content]", &page);
-    Ok(RawHtml(output))
+    Ok(RawHtml(output.replace("[title]", &title)))
 }
 #[catch(418)]
 async fn teapot() -> Result<RawHtml<String>, rocket::http::Status> {
