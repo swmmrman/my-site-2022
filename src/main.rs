@@ -76,6 +76,7 @@ async fn rocket() -> _ {
         .mount("/", routes![index, post, get_page, index_redirect, admin_index, get_admin_page])
         .mount("/js/", FileServer::from("public_html/js/").rank(-2))
         .mount("/css/", FileServer::from("public_html/css/").rank(-2))
+        .mount("/images/", FileServer::from("public_html/images/").rank(-2))
         .register("/", catchers![four_oh_four, four_oh_three, teapot])
         .register("/admin", catchers![four_oh_four_admin])
 }
