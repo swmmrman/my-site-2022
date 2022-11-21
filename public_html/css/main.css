@@ -9,6 +9,15 @@ body {
     color: limegreen;
     margin: 0px auto ;
 }
+h1 {
+    text-align: center;
+}
+.error{
+    color: red;
+}
+.centered {
+    text-align: center;
+}
 form input {
     float: right;
     color: limegreen;
