@@ -1,3 +1,4 @@
+//#![feature(io_error_more)]
 use std::path::{Path, PathBuf};
 use std::io::{Error, ErrorKind};
 use rocket::response::content::RawHtml;
@@ -56,6 +57,10 @@ pub fn parse_error(e: Error) -> rocket::http::Status {
     match e.kind() {
         ErrorKind::NotFound => rocket::http::Status::NotFound,
         ErrorKind::PermissionDenied => rocket::http::Status::Forbidden,
-        _ => rocket::http::Status::ImATeapot,
+        //ErrorKind::IsADirectory => rocket::http::Status::NotFound,
+        _ => {
+            println!("{}", e);
+            rocket::http::Status::ImATeapot
+        },
     }
 }
