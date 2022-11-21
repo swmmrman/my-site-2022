@@ -72,7 +72,7 @@ async fn four_oh_four_admin() -> Result<RawHtml<String>, rocket::http::Status> {
 }
 #[catch(418)]
 async fn teapot() -> Result<RawHtml<String>, rocket::http::Status> {
-    let (page, title) = my_site_2022::get_page_title(std::fs::read_to_string(Path::new("errors/418.html")).unwrap());
+    let (page, title) = my_site_2022::get_page_title("errors/418.html");
     let mut tmpl = std::fs::read_to_string(Path::new("template/main.tmpl.html")).unwrap();
     tmpl = tmpl.replace("[content]", &page);
     Ok(RawHtml(tmpl.replace("[title]", &title)))
