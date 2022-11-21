@@ -4,10 +4,19 @@ html {
 }
 body {
     background-color: rgb(36, 36, 36);
-    max-width: 120em;
+    max-width: 100em;
     min-height: 100vh;
     color: limegreen;
     margin: 0px auto ;
+}
+h1 {
+    text-align: center;
+}
+.error{
+    color: red;
+}
+.centered {
+    text-align: center;
 }
 form input {
     float: right;
@@ -52,4 +61,8 @@ footer {
     border-top: 1px solid lime;
     min-width: calc(100% - 1em);
     text-align: center;
+}
+.teapot {
+    display: block;
+    margin: 0 auto;
 }

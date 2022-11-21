@@ -1,4 +1,4 @@
-use std::path::PathBuf;
+use std::path::{PathBuf, Path};
 use rocket::form::Form;
 use rocket::{fs::FileServer, response::content::RawHtml};
 #[macro_use] extern crate rocket;
@@ -50,18 +50,34 @@ async fn post(fields: Form<FormFeilds<'_>>) -> RawHtml<String> {
 }
 
 #[catch(404)]
-async fn four_oh_four() -> rocket::fs::NamedFile {
-    rocket::fs::NamedFile::open("errors/404.html").await.ok().unwrap()
+async fn four_oh_four() -> Result<RawHtml<String>, rocket::http::Status> {
+    let (page, title) = my_site_2022::get_page_title("errors/404.html");
+    let tmpl = std::fs::read_to_string("template/main.tmpl.html").unwrap();
+    let output = tmpl.replace("[content]", &page);
+    Ok(RawHtml(output.replace("[title]", &title)))
 }
 
 #[catch(403)]
-async fn four_oh_three() -> rocket::fs::NamedFile {
-    rocket::fs::NamedFile::open("errors/403.html").await.ok().unwrap()
+async fn four_oh_three() -> Result<RawHtml<String>, rocket::http::Status> {
+    let (page, title) = my_site_2022::get_page_title("errors/403.html");
+    let tmpl = std::fs::read_to_string(Path::new("template/admin/main.tmpl.html")).unwrap();
+    let output = tmpl.replace("[content]", &page);
+    Ok(RawHtml(output.replace("[title]", &title)))
 }
 
 #[catch(404)]
-async fn four_oh_four_admin() -> rocket::fs::NamedFile {
-    rocket::fs::NamedFile::open("errors/404a.html").await.ok().unwrap()
+async fn four_oh_four_admin() -> Result<RawHtml<String>, rocket::http::Status> {
+    let (page, title) = my_site_2022::get_page_title("errors/404a.html");
+    let tmpl = std::fs::read_to_string(Path::new("template/admin/main.tmpl.html")).unwrap();
+    let output = tmpl.replace("[content]", &page);
+    Ok(RawHtml(output.replace("[title]", &title)))
+}
+#[catch(418)]
+async fn teapot() -> Result<RawHtml<String>, rocket::http::Status> {
+    let (page, title) = my_site_2022::get_page_title("errors/418.html");
+    let mut tmpl = std::fs::read_to_string(Path::new("template/main.tmpl.html")).unwrap();
+    tmpl = tmpl.replace("[content]", &page);
+    Ok(RawHtml(tmpl.replace("[title]", &title)))
 }
 
 #[launch]
@@ -70,6 +86,7 @@ async fn rocket() -> _ {
         .mount("/", routes![index, post, get_page, index_redirect, admin_index, get_admin_page])
         .mount("/js/", FileServer::from("public_html/js/").rank(-2))
         .mount("/css/", FileServer::from("public_html/css/").rank(-2))
-        .register("/", catchers![four_oh_four, four_oh_three])
+        .mount("/images/", FileServer::from("public_html/images/").rank(-2))
+        .register("/", catchers![four_oh_four, four_oh_three, teapot])
         .register("/admin", catchers![four_oh_four_admin])
 }

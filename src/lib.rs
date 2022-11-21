@@ -45,6 +45,13 @@ pub fn make_page(page: PathBuf, admin: bool) -> Result<RawHtml<String>, rocket::
     Ok(RawHtml(output))
 }
 
+pub fn get_page_title(file: &str) -> (String, String) {
+    let mut input = std::fs::read_to_string(Path::new(file)).unwrap();
+    let page = input.split_off(input.find("\n").unwrap()).to_string();
+    let title = input.to_string();
+    (page, title)
+}
+
 pub fn parse_error(e: Error) -> rocket::http::Status {
     match e.kind() {
         ErrorKind::NotFound => rocket::http::Status::NotFound,
